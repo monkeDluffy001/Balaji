@@ -1,25 +1,29 @@
-var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore;
+using Autofac.Extensions.DependencyInjection;
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+namespace Balaji.Api
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    class Program
+    {
+        public static void Main(string[] args) 
+        {
+            CreateWebHostBuilder(args).Build().Run();
+        }
+
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args)
+        {
+            return WebHost.CreateDefaultBuilder(args)
+                .ConfigureServices(services => services.AddAutofac())
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseIISIntegration()
+                .UseStartup<Startup>()
+                .ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.AddConsole();
+                });
+        }
+    }
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();

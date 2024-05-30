@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="6.5.0" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.0.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Balaji.ApiModels\Balaji.ApiModels.csproj" />
+    <ProjectReference Include="..\Balaji.Common\Balaji.Common.csproj" />
+    <ProjectReference Include="..\Balaji.Core\Balaji.Core.csproj" />
+    <ProjectReference Include="..\Balaji.Domain\Balaji.Domain.csproj" />
+    <ProjectReference Include="..\Balaji.Infrastructure\Balaji.Infrastructure.csproj" />
+    <ProjectReference Include="..\Balaji.Logging\Balaji.Logging.csproj" />
+  </ItemGroup>
+
+</Project>
