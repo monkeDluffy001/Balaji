@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore;
 using Autofac.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Balaji.Api
 {
@@ -23,6 +24,7 @@ namespace Balaji.Api
                 {
                     logging.ClearProviders();
                     logging.AddConsole();
+                    logging.AddDebug();
                 });
         }
     }

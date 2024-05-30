@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Balaji.ApiModels\Balaji.ApiModels.csproj" />
+  </ItemGroup>
+
 </Project>
