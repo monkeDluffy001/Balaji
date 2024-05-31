@@ -6,9 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Balaji.ApiModels\Balaji.ApiModels.csproj" />
-    <ProjectReference Include="..\Balaji.Common\Balaji.Common.csproj" />
-  </ItemGroup>
-
 </Project>

@@ -34,7 +34,8 @@ namespace Balaji.Api
                 System.Reflection.Assembly.Load("Balaji.Core"),
                 System.Reflection.Assembly.Load("Balaji.Domain"),
                 System.Reflection.Assembly.Load("Balaji.Infrastructure"),
-                System.Reflection.Assembly.Load("Balaji.Logging")
+                System.Reflection.Assembly.Load("Balaji.Logging"),
+                System.Reflection.Assembly.Load("Balaji.Common.Helpers")
             ).Where(t => t.IsClass)
             .AsImplementedInterfaces();
         }

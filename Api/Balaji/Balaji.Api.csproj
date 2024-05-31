@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Balaji.ApiModels\Balaji.ApiModels.csproj" />
+    <ProjectReference Include="..\Balaji.Common.Helpers\Balaji.Common.Helpers.csproj" />
     <ProjectReference Include="..\Balaji.Common\Balaji.Common.csproj" />
     <ProjectReference Include="..\Balaji.Core\Balaji.Core.csproj" />
     <ProjectReference Include="..\Balaji.Domain\Balaji.Domain.csproj" />

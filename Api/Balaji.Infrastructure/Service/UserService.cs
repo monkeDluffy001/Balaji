@@ -1,4 +1,6 @@
 ﻿using Balaji.ApiModels;
+using Balaji.Common.Models;
+using Balaji.Core.Repository;
 using Balaji.Core.Service;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,8 +14,11 @@ namespace Balaji.Infrastructure.Service
     public class UserService : IUserService
     {
         private readonly ILogger<UserService> logger;
-        public UserService(ILogger<UserService> _logger) {
+        private readonly IUserRepository userRepository;
+        public UserService(ILogger<UserService> _logger, IUserRepository _userRepository) {
             logger = _logger;
+            userRepository = _userRepository;
+            
         }
         public async Task<dynamic> GetUserAsync(UserApiModel model)
         {
@@ -32,6 +37,23 @@ namespace Balaji.Infrastructure.Service
                 throw;
             }
            
+        }
+
+        public async Task<dynamic> AddUserAsync(PublicSession session, UserApiModel user)
+        {
+            try
+            {
+                logger.LogInformation($"UserService.AddUserAsync at {DateTime.Now}");
+
+                var result = await userRepository.InsertUserAsync(session, user);
+
+                return result;
+            }
+            catch(Exception ex)
+            {
+                logger.LogError($"Error: {ex.Message} at {DateTime.Now}");
+                throw;
+            }
         }
     }
 }

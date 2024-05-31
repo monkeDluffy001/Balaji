@@ -11,8 +11,15 @@ namespace Balaji.ApiModels
     {
         public UserApiModel() { }
         public UserApiModel(User o) {
-           o.UserName = o.UserName;
-           o.Password = o.Password;
+            UserType = o.UserType;
+            FirstName = o.FirstName;
+            LastName = o.LastName;
+            MiddleName = o.MiddleName;
+            Address = o.Address;
+            MobileNumber = o.MobileNumber;
+            Email = o.Email;
+            Password = o.Password;
+            CountryCode = o.CountryCode;
         }
     }
 }

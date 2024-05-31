@@ -10,35 +10,36 @@ namespace Balaji.Api.Controllers
     [ApiController]
     public class ApiBaseController : ControllerBase
     {
-        private readonly ILogger<ApiBaseController> logger;
-        private readonly IApiBaseApiService apiBaseService;
-        public ApiBaseController(ILogger<ApiBaseController> _logger, IApiBaseApiService _apiBaseService)
-        {
-            logger = _logger;
-            apiBaseService = _apiBaseService;
-        }
+        //private readonly ILogger<ApiBaseController> logger;
+        //private readonly IApiBaseApiService apiBaseService;
+        //public ApiBaseController(ILogger<ApiBaseController> _logger, IApiBaseApiService _apiBaseService)
+        //{
+        //    logger = _logger;
+        //    apiBaseService = _apiBaseService;
+        //}
+        //public ApiBaseController(ILogger<>)
 
-        [HttpPost("", Name = "GetUserAsync")]
-        
-        public async Task<IActionResult> GetUserAsync(UserApiModel model)
-        {
-            try
-            {
-               logger.LogInformation($"ApiBase.GetUserAsync- start at {DateTime.Now}");
+        //[HttpPost("", Name = "GetUserAsync")]
 
-               ApiResponse response = await apiBaseService.GetUserAsync(model);
+        //public async Task<IActionResult> GetUserAsync(UserApiModel model)
+        //{
+        //    try
+        //    {
+        //        logger.LogInformation($"ApiBase.GetUserAsync- start at {DateTime.Now}");
 
-               return Ok(response);
-            }
-            catch(Exception ex)
-            {
-               logger.LogError($"Error: {ex.Message}");
-               return BadRequest(ex.Message);
-            }
-            finally
-            {
-                logger.LogInformation($"ApiBase.GetUserAsync- end at {DateTime.Now}");
-            }
-        }
+        //        ApiResponse response = await apiBaseService.GetUserAsync(model);
+
+        //        return Ok(response);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        logger.LogError($"Error: {ex.Message}");
+        //        return BadRequest(ex.Message);
+        //    }
+        //    finally
+        //    {
+        //        logger.LogInformation($"ApiBase.GetUserAsync- end at {DateTime.Now}");
+        //    }
+        //}
     }
 }

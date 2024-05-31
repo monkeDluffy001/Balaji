@@ -7,11 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.15" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
+    <PackageReference Include="MySqlConnector" Version="2.3.7" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Balaji.ApiModels\Balaji.ApiModels.csproj" />
+    <ProjectReference Include="..\Balaji.Common\Balaji.Common.csproj" />
     <ProjectReference Include="..\Balaji.Core\Balaji.Core.csproj" />
   </ItemGroup>
 
