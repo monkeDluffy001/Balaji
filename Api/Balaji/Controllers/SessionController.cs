@@ -1,7 +1,7 @@
 ﻿using Balaji.Api.ApiService;
 using Balaji.ApiModels;
 using Balaji.Common.Models;
-using Microsoft.AspNetCore.Http;
+using Balaji.Domain;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Balaji.Api.Controllers
@@ -10,12 +10,16 @@ namespace Balaji.Api.Controllers
     [ApiController]
     public class SessionController : ControllerBase
     {
-       private readonly ILogger<SessionController> logger;
-       private readonly ISessionApiService sessionApiService;
+        private readonly ILogger<SessionController> logger;
+        private readonly ISessionApiService sessionApiService;
         private readonly IConfiguration configuration;
-       
 
-        public SessionController(ILogger<SessionController> logger, ISessionApiService sessionApiService, IConfiguration configuration)
+
+        public SessionController(
+            ILogger<SessionController> logger,
+            ISessionApiService sessionApiService,
+            IConfiguration configuration
+        )
         {
             this.logger = logger;
             this.sessionApiService = sessionApiService;
@@ -28,16 +32,16 @@ namespace Balaji.Api.Controllers
             try
             {
                 logger.LogInformation($"SessionController.AddUserAsync at {DateTime.Now}");
-                
+
                 PublicSession session = new PublicSession();
 
                 session.ConnectionString = configuration.GetConnectionString("Default");
 
                 ApiResponse response = await sessionApiService.AddUserAsync(session, user).ConfigureAwait(false);
 
-                return Ok(response);                
+                return Ok(response);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logger.LogError($"Error: {ex.Message} at {DateTime.Now}");
 
@@ -59,15 +63,23 @@ namespace Balaji.Api.Controllers
         {
             try
             {
+                logger.LogInformation($"SessionController.LoginUserAsync at {DateTime.Now}");
+                PublicSession session = new PublicSession();
+
+                session.ConnectionString = configuration.GetConnectionString("Default");
+
+                User userDetails = await sessionApiService.LoginUserAsync(session, user);
+
+                return Ok(userDetails);
 
             }
-            catch(Exception ex)
+            catch (Exception)
             {
 
             }
 
             return Ok();
         }
-        
+
     }
 }

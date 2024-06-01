@@ -1,5 +1,7 @@
 ﻿using Autofac;
-using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace Balaji.Api
 {
@@ -8,7 +10,7 @@ namespace Balaji.Api
         private readonly IConfiguration configuration;
         public Startup(IConfiguration _configuration, ILogger<Startup> logger)
         {
-            configuration =_configuration;
+            configuration = _configuration;
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -23,6 +25,28 @@ namespace Balaji.Api
                 options.IdleTimeout = TimeSpan.FromMinutes(60);
                 options.Cookie.IsEssential = true;
             });
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+             .AddJwtBearer(options =>
+             {
+                 var jwtSettings = configuration.GetSection("Jwt");
+                 options.TokenValidationParameters = new TokenValidationParameters
+                 {
+                     ValidateIssuer = true,
+                     ValidateAudience = true,
+                     ValidateLifetime = true,
+                     ValidateIssuerSigningKey = true,
+                     ValidIssuer = jwtSettings["Issuer"],
+                     ValidAudience = jwtSettings["Audience"],
+                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]))
+                 };
+             });
+
+            services.AddAuthorization();
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
