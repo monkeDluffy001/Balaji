@@ -1,7 +1,6 @@
 ﻿using Balaji.Api.ApiService;
 using Balaji.ApiModels;
 using Balaji.Common.Models;
-using Balaji.Domain;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Balaji.Api.Controllers
@@ -68,17 +67,16 @@ namespace Balaji.Api.Controllers
 
                 session.ConnectionString = configuration.GetConnectionString("Default");
 
-                User userDetails = await sessionApiService.LoginUserAsync(session, user);
+                ApiResponse response = await sessionApiService.LoginUserAsync(session, user);
 
-                return Ok(userDetails);
+                return Ok(response);
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                logger.LogError($"Error:{ex.Message} at {DateTime.Now}");
+                return BadRequest(ex.Message);
             }
-
-            return Ok();
         }
 
     }

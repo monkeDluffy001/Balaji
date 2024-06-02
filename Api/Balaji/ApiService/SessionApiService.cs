@@ -5,6 +5,7 @@ using Balaji.Core.Service;
 using Balaji.Domain;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 
 namespace Balaji.Api.ApiService
@@ -13,17 +14,20 @@ namespace Balaji.Api.ApiService
     {
         private readonly ILogger<SessionApiService> logger;
         private readonly IUserService userService;
+        private readonly ISessionService sessionService;
         private readonly IConfiguration configuration;
 
         public SessionApiService(
             ILogger<SessionApiService> _logger,
             IUserService _userService,
-            IConfiguration _configuration
+            IConfiguration _configuration,
+            ISessionService _sessionService
         )
         {
             logger = _logger;
             userService = _userService;
             configuration = _configuration;
+            sessionService = _sessionService;
         }
 
         public List<dynamic> ValidateUser(UserApiModel user)
@@ -80,7 +84,6 @@ namespace Balaji.Api.ApiService
 
             return response;
         }
-
         public async Task<ApiResponse> LoginUserAsync(PublicSession session, UserApiModel credentials)
         {
             ApiResponse response = new ApiResponse();
@@ -103,6 +106,7 @@ namespace Balaji.Api.ApiService
 
                 Session userSession = new Session()
                 {
+                    SessionId = IdGnerators.GenerateUniqueId(currentUser.Email),
                     UserId = currentUser.Id,
                     UserName = currentUser.Email,
                     Email = currentUser.Email,
@@ -112,9 +116,15 @@ namespace Balaji.Api.ApiService
                     LastName = currentUser.LastName,
                     CountryCode = currentUser.CountryCode,
                     ConnectionString = session.ConnectionString ?? string.Empty,
-                    SessionValadity = DateTime.Now.AddHours(1)
+                    SessionValidity = DateTime.Now.AddHours(1)
                 };
 
+                var result = await sessionService.AddSessionAsync(userSession).ConfigureAwait(false);
+
+                if (result == null)
+                {
+                    throw new Exception("Unable to add session in db");
+                }
                 // Generate Token
                 var jwtSettings = configuration.GetSection("Jwt");
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]));
@@ -126,11 +136,14 @@ namespace Balaji.Api.ApiService
                                 expires: DateTime.Now.AddMinutes(
                                     Convert.ToDouble(jwtSettings["DurationInMinutes"])
                                 ),
-                                signingCredentials: creds);
+                                signingCredentials: creds,
+                                 claims: new[] { new Claim("sessionId", userSession.SessionId) });
+
+                var tokenHandler = new JwtSecurityTokenHandler();
 
                 response.Data.Add(new
                 {
-                    Token = token
+                    Token = tokenHandler.WriteToken(token),
                 });
 
                 response.DataCount = response.Data.Count();

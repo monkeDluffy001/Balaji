@@ -2,7 +2,7 @@
 {
     public class Session
     {
-        public long SessionId { get; set; }
+        public string? SessionId { get; set; }
 
         public long UserId { get; set; }
 
@@ -22,6 +22,6 @@
 
         public string? ConnectionString { get; set; }
 
-        public DateTime SessionValadity { get; set; }
+        public DateTime SessionValidity { get; set; }
     }
 }
