@@ -48,6 +48,20 @@ namespace Balaji.Api
                 options.Cookie.IsEssential = true;
             });
 
+            string? origins = configuration.GetSection("AllowedOrigins").Get<string>();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigin",
+                    builder =>
+                    {
+                      builder.WithOrigins(origins)
+                             .AllowAnyHeader()
+                             .AllowAnyMethod();
+                    }
+                );
+            });
+
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
@@ -76,6 +90,9 @@ namespace Balaji.Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            // Use CORS policy
+            app.UseCors("AllowSpecificOrigin");
 
             app.UseAuthentication();
 
