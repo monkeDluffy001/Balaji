@@ -137,7 +137,7 @@ namespace Balaji.Api.ApiService
                                     Convert.ToDouble(jwtSettings["DurationInMinutes"])
                                 ),
                                 signingCredentials: creds,
-                                 claims: new[] { new Claim("sessionId", userSession.SessionId) });
+                                claims: new[] { new Claim("sessionId", userSession.SessionId) });
 
                 var tokenHandler = new JwtSecurityTokenHandler();
 
