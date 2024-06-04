@@ -1,4 +1,3 @@
-import './App.css';
 import { CssBaseline } from '@mui/material';
 import ThemeProvider from './theme';
 import { Suspense } from 'react';

@@ -1,10 +1,11 @@
 import { TextField } from '@mui/material';
+import { isNil } from 'lodash';
 
 export const inputTextFieldStyles = (theme) => {
   return {
     borderRadius: 1,
-    backgroundColor: theme.palette.common.white,
     '& .MuiOutlinedInput-root': {
+      backgroundColor: theme.palette.common.white,
       '& fieldset': {
         borderColor: theme.palette.grey[300], // Initial border color
       },
@@ -19,8 +20,18 @@ export const inputTextFieldStyles = (theme) => {
 };
 
 const InputTextField = (props) => {
-  const { placeholder, field, type } = props;
-  return <TextField {...field} type={type} sx={(theme) => inputTextFieldStyles(theme)} placeholder={placeholder} />;
+  const { placeholder, field, type, errors } = props;
+
+  return (
+    <TextField
+      {...field}
+      type={type}
+      sx={(theme) => inputTextFieldStyles(theme)}
+      placeholder={placeholder}
+      error={!isNil(errors)}
+      helperText={errors && errors.message}
+    />
+  );
 };
 
 export default InputTextField;
