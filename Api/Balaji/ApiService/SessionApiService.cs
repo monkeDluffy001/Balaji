@@ -5,6 +5,7 @@ using Balaji.Core.Service;
 using Balaji.Domain;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 
@@ -144,6 +145,17 @@ namespace Balaji.Api.ApiService
                 response.Data.Add(new
                 {
                     Token = tokenHandler.WriteToken(token),
+                    UserName = currentUser.Email,
+                    UserType = currentUser.UserType,
+                    FirstName = currentUser.FirstName,
+                    LastName = currentUser.LastName,
+                    MiddleName = currentUser.MiddleName,
+                    Address = currentUser.Address,
+                    MobileNumber = currentUser.MobileNumber,
+                    Email = currentUser.Email,
+                    Password = currentUser.Password,
+                    CountryCode = currentUser.CountryCode,
+                    UserId = currentUser.Id
                 });
 
                 response.DataCount = response.Data.Count();
