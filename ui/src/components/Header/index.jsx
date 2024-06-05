@@ -11,39 +11,12 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
-import { Stack, TextField } from '@mui/material';
+import { Stack } from '@mui/material';
+import { buttonStyles, navHeaderStyles, navIconStyles } from './Styles';
+import SearchBar from '../SearchBar.js';
 
-const pages = ['Products', 'Pricing', 'Blog'];
-const settings = ['Profile', 'Contract', 'Logout'];
-
-export const navIconStyles = () => {
-  return { display: { xs: 'none', md: 'flex' }, mr: 1 };
-};
-
-export const navHeaderStyles = () => {
-  return {
-    mr: 2,
-    display: { xs: 'none', md: 'flex' },
-    fontFamily: 'monospace',
-    fontWeight: 700,
-    letterSpacing: '.3rem',
-    color: 'inherit',
-    textDecoration: 'none',
-    cursor: 'pointer',
-  };
-};
-
-export const buttonStyles = () => {
-  return {
-    '&:focus': {
-      outline: 'none',
-      border: 'none !important',
-    },
-    my: 2,
-    color: 'white',
-    display: 'block',
-  };
-};
+const pages = ['Dashboard', 'Users', 'Products', 'Contract'];
+const settings = ['Profile', 'Logout'];
 
 const Header = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -63,7 +36,13 @@ const Header = () => {
 
   console.log(anchorElNav);
   return (
-    <AppBar position="static" color="secondary">
+    <AppBar
+      sx={() => ({
+        // backgroundColor: ,
+      })}
+      position="static"
+      color="secondary"
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={() => navIconStyles()} />
@@ -78,17 +57,10 @@ const Header = () => {
               </Button>
             ))}
           </Stack>
-          <Box
-            sx={(theme) => ({
-              backgroundColor: theme.palette.common.white,
-              widtH: '200px',
-            })}
-            mr={5}
-          >
-            <TextField variant="filled" />
-          </Box>
 
-          <Box sx={{ flexGrow: 0 }}>
+          <SearchBar />
+
+          <Box sx={{ flexGrow: 0, ml: 5 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
