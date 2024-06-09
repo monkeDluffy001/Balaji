@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Balaji.Common.Models;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Balaji.Common.Helpers
 {
@@ -39,6 +35,131 @@ namespace Balaji.Common.Helpers
         public static bool IsNotNull(string value)
         {
             return value != null;
+        }
+
+        public static List<dynamic> ValidateSearchRequest(SearchRequest request)
+        {
+            int page = request.Page;
+            int pageSize = request.PageSize;
+            List<string> allowedOperators = new List<string>()
+            {
+                "=",
+                "<>",
+                ">",
+                "<",
+                ">=",
+                "<=",
+                "IN",
+                "LIKE",
+                "IS NULL",
+                "IS NOT NULL"
+            };
+            List<string> allowedOrders = new List<string>()
+            {
+              "ASC",
+              "DESC"
+            };
+            List<dynamic> errorList = new List<dynamic>();
+            List<Criterion> criterions = request.Criterion;
+            List<string> fields = request.Fields;
+            List<Sort> sort = request.Sort;
+
+            if (page < 0)
+            {
+                errorList.Add(new
+                {
+                    Message = "Page cannot be negative",
+                    StackTrace = "ValidateSearchRequest at Balaji.Common.Helpers.Validations"
+                });
+            }
+
+            if (pageSize < 0)
+            {
+                errorList.Add(new
+                {
+                    Message = "PageSize cannot be negative",
+                    StackTrace = "ValidateSearchRequest at Balaji.Common.Helpers.Validations"
+                });
+            }
+
+            if (fields.Count() == 0)
+            {
+                errorList.Add(new
+                {
+                    Message = "Field list is empty!",
+                    StackTrace = "ValidateSearchRequest at Balaji.Common.Helpers.Validations"
+                });
+            }
+            else
+            {
+                foreach (string field in fields)
+                {
+                    if (string.IsNullOrEmpty(field))
+                    {
+                        errorList.Add(new
+                        {
+                            Message = "Field list contains empty fields ",
+                            StackTrace = "ValidateSearchRequest at Balaji.Common.Helpers.Validations "
+                        });
+                        break;
+                    }
+                }
+            }
+
+            if (sort.Count() > 0)
+            {
+                foreach (Sort item in sort)
+                {
+                    if (string.IsNullOrEmpty(item.Field))
+                    {
+                        errorList.Add(new
+                        {
+                            Message = "sort contains empty fields",
+                            StackTrace = "ValidateSearchRequest at Balaji.Common.Helpers.Validations "
+                        });
+                        break;
+                    }
+
+                    if (string.IsNullOrEmpty(item.Order) || !allowedOrders.Contains(item.Order.ToUpper()))
+                    {
+                        errorList.Add(new
+                        {
+                            Message = "Invalid sort order in sort list",
+                            StackTrace = "ValidateSearchRequest at Balaji.Common.Helpers.Validations "
+                        });
+                        break;
+                    }
+                }
+            }
+
+            if (criterions.Count() > 0)
+            {
+                foreach (Criterion criteria in criterions)
+                {
+                    if (string.IsNullOrEmpty(criteria.Field))
+                    {
+                        errorList.Add(new
+                        {
+                            Message = "Criterion contains empty fields",
+                            StackTrace = "ValidateSearchRequest at Balaji.Common.Helpers.Validations "
+                        });
+                        break;
+                    }
+
+                    if (string.IsNullOrEmpty(criteria.Operator) || !allowedOperators.Contains(criteria.Operator.ToUpper()))
+                    {
+                        errorList.Add(new
+                        {
+                            Message = "Criterion contains invalid operators",
+                            StackTrace = "ValidateSearchRequest at Balaji.Common.Helpers.Validations "
+                        });
+
+                        break;
+                    }
+                }
+            }
+
+            return errorList;
         }
     }
 }

@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Balaji.Common\Balaji.Common.csproj" />
+  </ItemGroup>
+
 </Project>

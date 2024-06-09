@@ -1,6 +1,7 @@
 ﻿using Balaji.ApiModels;
 using Balaji.Common.Models;
 using Balaji.Core.Repository;
+using Balaji.Core.Search;
 using Balaji.Core.Service;
 using Balaji.Domain;
 using Microsoft.Extensions.Logging;
@@ -11,12 +12,19 @@ namespace Balaji.Infrastructure.Service
     {
         private readonly ILogger<UserService> logger;
         private readonly IUserRepository userRepository;
-        public UserService(ILogger<UserService> _logger, IUserRepository _userRepository)
+        private readonly IUserSearch userSearch;
+
+        public UserService(
+            ILogger<UserService> _logger,
+            IUserRepository _userRepository,
+            IUserSearch _userSearch
+        )
         {
             logger = _logger;
             userRepository = _userRepository;
-
+            userSearch = _userSearch;
         }
+
         public async Task<dynamic> GetUserAsync(UserApiModel model)
         {
             try
@@ -67,6 +75,27 @@ namespace Balaji.Infrastructure.Service
                 logger.LogError($"Error: {ex.Message} at {DateTime.Now}");
                 throw;
             }
+        }
+
+        public async Task<List<dynamic>> SearchUserAsync(Session session, SearchRequest request)
+        {
+            logger.LogInformation($"UserService.SearchUserAsync at {DateTime.Now}");
+
+            try
+            {
+                // Get sql statement
+                string sqlStatement = userSearch.GetSqlStatement(request);
+                return new List<dynamic>()
+                {
+                    sqlStatement
+                };
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"Error: {ex.Message} at {DateTime.Now}");
+                throw;
+            }
+
         }
     }
 }

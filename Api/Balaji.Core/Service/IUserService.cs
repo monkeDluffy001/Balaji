@@ -9,5 +9,6 @@ namespace Balaji.Core.Service
         public Task<dynamic> GetUserAsync(UserApiModel model);
         public Task<dynamic> AddUserAsync(PublicSession session, UserApiModel user);
         public Task<List<User>> GetUserDetailsAsync(PublicSession session, UserApiModel model);
+        Task<List<dynamic>> SearchUserAsync(Session session, SearchRequest request);
     }
 }

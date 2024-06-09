@@ -142,5 +142,34 @@ namespace Balaji.Infrastructure.Repository
                 throw;
             }
         }
+
+        public virtual async Task<List<TEntity>> QueryAsync(PublicSession session, string? sql)
+        {
+            if (string.IsNullOrEmpty(session.ConnectionString))
+            {
+                throw new Exception(CustomMessages.CONNECTION_STRING_EMPTY);
+            }
+
+            using (var connection = new MySqlConnection(session.ConnectionString))
+            {
+                var result = await connection.QueryAsync<TEntity>(sql).ConfigureAwait(false);
+                return result.ToList();
+            }
+        }
+
+        public virtual async Task<List<TEntity>> QueryAsync(Session session, string? sql)
+        {
+            if (string.IsNullOrEmpty(session.ConnectionString))
+            {
+                throw new Exception(CustomMessages.CONNECTION_STRING_EMPTY);
+            }
+
+            using (var connection = new MySqlConnection(session.ConnectionString))
+            {
+                var result = await connection.QueryAsync<TEntity>(sql);
+                return result.ToList();
+            }
+        }
+
     }
 }

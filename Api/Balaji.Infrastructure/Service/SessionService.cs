@@ -31,5 +31,27 @@ namespace Balaji.Infrastructure.Service
                 throw;
             }
         }
+
+        public async Task<Session> GetUserSession(PublicSession session, string sessionId)
+        {
+            logger.LogInformation($"SessionService.GetUserSession at {DateTime.Now}");
+
+            try
+            {
+                Session result = await sessionRepository.GetUserSession(session, sessionId).ConfigureAwait(false);
+
+                if (result != null && result.SessionValidity < DateTime.Now)
+                {
+                    throw new Exception(CustomMessages.INVALID_SESSION);
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"Error:{ex.Message} at {DateTime.Now}");
+                throw;
+            }
+        }
     }
 }

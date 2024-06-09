@@ -38,5 +38,19 @@ namespace Balaji.Infrastructure.Repository
 
             return res;
         }
+
+        public async Task<Session> GetUserSession(PublicSession session, string sessionId)
+        {
+            string sql = $@"SELECT * FROM {tableName} WHERE SessionId = '{sessionId}'";
+
+            List<Session> sessionList = await QueryAsync(session, sql).ConfigureAwait(false);
+
+            if (sessionList.Count <= 0)
+            {
+                throw new Exception(CustomMessages.GET_SESION_FAILUTRE);
+            }
+
+            return sessionList[0];
+        }
     }
 }

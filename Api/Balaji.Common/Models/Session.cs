@@ -23,5 +23,7 @@
         public string? ConnectionString { get; set; }
 
         public DateTime SessionValidity { get; set; }
+
+        public DateTime? InsertedTimestamp { get; set; }
     }
 }

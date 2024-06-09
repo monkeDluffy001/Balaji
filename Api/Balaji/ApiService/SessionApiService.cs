@@ -5,7 +5,6 @@ using Balaji.Core.Service;
 using Balaji.Domain;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net;
 using System.Security.Claims;
 using System.Text;
 
@@ -52,6 +51,29 @@ namespace Balaji.Api.ApiService
 
             return errorList;
         }
+
+        public async Task<Session> GetUserSessionAsync(string? sessionId)
+        {
+            logger.LogInformation($"SessionApiService.GetUserSessionAsync at {DateTime.Now}");
+
+            try
+            {
+                PublicSession session = new PublicSession()
+                {
+                    ConnectionString = configuration.GetConnectionString("Default")
+                };
+
+                Session userSession = await sessionService.GetUserSession(session, sessionId).ConfigureAwait(false);
+
+                return userSession;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"Error: {ex.Message} at {DateTime.Now}");
+                throw;
+            }
+        }
+
         public async Task<ApiResponse> AddUserAsync(PublicSession session, UserApiModel user)
         {
 
@@ -85,6 +107,7 @@ namespace Balaji.Api.ApiService
 
             return response;
         }
+
         public async Task<ApiResponse> LoginUserAsync(PublicSession session, UserApiModel credentials)
         {
             ApiResponse response = new ApiResponse();
